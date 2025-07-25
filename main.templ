@@ -30,6 +30,7 @@ templ header(){
 templ newUserForm(){
     <div class="new-user-form">
         <form
+			mx-target="#new-user-form"
             hx-post="/api/users"
             hx-ext="json-enc"
         >
@@ -48,6 +49,10 @@ templ newUserForm(){
             <button type="submit">Create Account!</button>
         </form>
     </div>
+}
+
+templ Created(){
+	<b>Created!</b>
 }
 
 templ NewUserPage(){

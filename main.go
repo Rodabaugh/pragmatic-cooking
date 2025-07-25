@@ -64,6 +64,8 @@ func main() {
 		NewUserPage().Render(r.Context(), w)
 	})
 
+	mux.HandleFunc("POST /api/users", apiCfg.handlerCreateUser)
+
 	server := &http.Server{
 		Addr:         ":" + port,
 		Handler:      mux,
