@@ -20,7 +20,7 @@ var ErrNoAuthHeaderIncluded = errors.New("no auth header included in request")
 
 const (
 	// TokenTypeAccess -
-	TokenTypeAccess TokenType = "digitalshelf-access"
+	TokenTypeAccess TokenType = "pragmatic.cooking-access"
 )
 
 func HashPassword(password string) (string, error) {

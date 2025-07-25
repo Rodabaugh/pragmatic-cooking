@@ -46,7 +46,18 @@ func (cfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	cfg.sendMGEmail(user.Name, user.EmailAddr, "New Pragmatic Recepies Account", "An account on Pragmatic.Recepies has been created using this email address")
+	loginToken, err := cfg.CreateLoginToken(user.ID, r)
+
+	var welcomeMsg string
+	
+	if err != nil{
+		welcomeMsg = "An account on Pragmatic.Recepies has been created using this email address."
+	} else {
+		loginLink := "http://localhost:8080/login/" + loginToken
+		welcomeMsg = "An account on Pragmatic.Recepies has been created using this email address. Login with the link below.\n\n" + loginLink
+	}
+
+	cfg.sendMGEmail(user.Name, user.EmailAddr, "New Pragmatic Recepies Account", welcomeMsg)
 
 	if r.Header.Get("Accept") == "application/json" {
 		respondWithJSON(w, http.StatusCreated, response{

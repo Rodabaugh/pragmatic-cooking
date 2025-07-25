@@ -10,6 +10,13 @@ import (
 	"github.com/google/uuid"
 )
 
+type LoginToken struct {
+	Token     uuid.UUID
+	UserID    uuid.UUID
+	CreatedAt time.Time
+	ExpireAt  time.Time
+}
+
 type User struct {
 	ID            uuid.UUID
 	CreatedAt     time.Time
