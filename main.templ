@@ -66,6 +66,17 @@ templ NewUserPage(){
     </html>
 }
 
+templ UserPage(){
+<!DOCTYPE html>
+    <html>
+        @head()
+        <body class={base()}>
+            <center>@header()</center>
+			<center>Welcome User!</center>
+		</body>
+    </html>
+}
+
 templ MainPage(cfg *apiConfig){
     <!DOCTYPE html>
     <html>

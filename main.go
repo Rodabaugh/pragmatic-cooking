@@ -14,9 +14,10 @@ import (
 )
 
 type apiConfig struct {
-	platform string
-	db       *database.Queries
-	mgAPIKey string
+	platform  string
+	db        *database.Queries
+	jwtSecret string
+	mgAPIKey  string
 }
 
 func main() {
@@ -42,6 +43,11 @@ func main() {
 		log.Fatal("PLATFORM must be set to either dev or prod")
 	}
 
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		log.Fatal("JWT_SECRET environment variable is not set")
+	}
+
 	mgAPIKey := os.Getenv("MG_API_KEY")
 	if mgAPIKey == "" {
 		log.Fatal("A Mailgun API key is required")
@@ -54,9 +60,10 @@ func main() {
 	dbQueries := database.New(dbConn)
 
 	apiCfg := apiConfig{
-		platform: platform,
-		db:       dbQueries,
-		mgAPIKey: mgAPIKey,
+		platform:  platform,
+		db:        dbQueries,
+		jwtSecret: jwtSecret,
+		mgAPIKey:  mgAPIKey,
 	}
 
 	mux := http.NewServeMux()
@@ -70,6 +77,8 @@ func main() {
 	mux.HandleFunc("GET /user", func(w http.ResponseWriter, r *http.Request) {
 		NewUserPage().Render(r.Context(), w)
 	})
+
+	mux.HandleFunc("GET /login/{login_token}", apiCfg.handlerLogin)
 
 	mux.HandleFunc("POST /api/users", apiCfg.handlerCreateUser)
 
