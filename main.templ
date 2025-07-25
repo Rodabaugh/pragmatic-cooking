@@ -27,7 +27,41 @@ templ header(){
     </div>
 }
 
-templ MainPage(){
+templ newUserForm(){
+    <div class="new-user-form">
+        <form
+            hx-post="/api/users"
+            hx-ext="json-enc"
+        >
+            <input
+                type="text"
+                name="user_name"
+                placeholder="Name"
+                size="50"
+            />
+            <input
+                type="email"
+                name="user_email"
+                placeholder="user@example.com"
+                size="50"
+            />
+            <button type="submit">Create Account!</button>
+        </form>
+    </div>
+}
+
+templ NewUserPage(){
+	<!DOCTYPE html>
+    <html>
+        @head()
+        <body class={base()}>
+            <center>@header()</center>
+			<center>@newUserForm()</center>
+		</body>
+    </html>
+}
+
+templ MainPage(cfg *apiConfig){
     <!DOCTYPE html>
     <html>
         @head()
