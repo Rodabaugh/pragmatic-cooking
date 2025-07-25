@@ -12,20 +12,21 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (id, created_at, updated_at, name, email_addr)
+INSERT INTO users (id, created_at, updated_at, name, email_addr, email_verified)
 VALUES (
-    gen_random_uuid(), NOW(), NOW(), $1, $2
+    gen_random_uuid(), NOW(), NOW(), $1, $2, $3
 )
-RETURNING id, created_at, updated_at, name, email_addr
+RETURNING id, created_at, updated_at, name, email_addr, email_verified
 `
 
 type CreateUserParams struct {
-	Name      string
-	EmailAddr string
+	Name          string
+	EmailAddr     string
+	EmailVerified bool
 }
 
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, arg.Name, arg.EmailAddr)
+	row := q.db.QueryRowContext(ctx, createUser, arg.Name, arg.EmailAddr, arg.EmailVerified)
 	var i User
 	err := row.Scan(
 		&i.ID,
@@ -33,6 +34,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 		&i.UpdatedAt,
 		&i.Name,
 		&i.EmailAddr,
+		&i.EmailVerified,
 	)
 	return i, err
 }
@@ -47,7 +49,7 @@ func (q *Queries) DeleteUserByID(ctx context.Context, id uuid.UUID) error {
 }
 
 const getAllUsers = `-- name: GetAllUsers :many
-SELECT id, created_at, updated_at, name, email_addr FROM users
+SELECT id, created_at, updated_at, name, email_addr, email_verified FROM users
 `
 
 func (q *Queries) GetAllUsers(ctx context.Context) ([]User, error) {
@@ -65,6 +67,7 @@ func (q *Queries) GetAllUsers(ctx context.Context) ([]User, error) {
 			&i.UpdatedAt,
 			&i.Name,
 			&i.EmailAddr,
+			&i.EmailVerified,
 		); err != nil {
 			return nil, err
 		}
@@ -80,7 +83,7 @@ func (q *Queries) GetAllUsers(ctx context.Context) ([]User, error) {
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, created_at, updated_at, name, email_addr FROM users WHERE email_addr = $1
+SELECT id, created_at, updated_at, name, email_addr, email_verified FROM users WHERE email_addr = $1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, emailAddr string) (User, error) {
@@ -92,12 +95,13 @@ func (q *Queries) GetUserByEmail(ctx context.Context, emailAddr string) (User, e
 		&i.UpdatedAt,
 		&i.Name,
 		&i.EmailAddr,
+		&i.EmailVerified,
 	)
 	return i, err
 }
 
 const getUserByID = `-- name: GetUserByID :one
-SELECT id, created_at, updated_at, name, email_addr FROM users WHERE id = $1
+SELECT id, created_at, updated_at, name, email_addr, email_verified FROM users WHERE id = $1
 `
 
 func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
@@ -109,6 +113,7 @@ func (q *Queries) GetUserByID(ctx context.Context, id uuid.UUID) (User, error) {
 		&i.UpdatedAt,
 		&i.Name,
 		&i.EmailAddr,
+		&i.EmailVerified,
 	)
 	return i, err
 }

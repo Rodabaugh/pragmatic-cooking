@@ -19,8 +19,8 @@ type User struct {
 
 func (cfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
-		UserName string `json:"user_name"`
-		UserEmail  string `json:"user_email"`
+		UserName  string `json:"user_name"`
+		UserEmail string `json:"user_email"`
 	}
 
 	type response struct {
@@ -36,9 +36,11 @@ func (cfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	user, err := cfg.db.CreateUser(r.Context(), database.CreateUserParams{
-		Name:      params.UserName,
-		EmailAddr: params.UserEmail,
+		Name:          params.UserName,
+		EmailAddr:     params.UserEmail,
+		EmailVerified: false,
 	})
+
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Unable to create user", err)
 		return
