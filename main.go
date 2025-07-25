@@ -16,6 +16,7 @@ import (
 type apiConfig struct {
 	platform string
 	db       *database.Queries
+	mgAPIKey string
 }
 
 func main() {
@@ -41,6 +42,11 @@ func main() {
 		log.Fatal("PLATFORM must be set to either dev or prod")
 	}
 
+	mgAPIKey := os.Getenv("MG_API_KEY")
+	if mgAPIKey == "" {
+		log.Fatal("A Mailgun API key is required")
+	}
+
 	dbConn, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		log.Fatalf("Error opening database: %s", err)
@@ -50,6 +56,7 @@ func main() {
 	apiCfg := apiConfig{
 		platform: platform,
 		db:       dbQueries,
+		mgAPIKey: mgAPIKey,
 	}
 
 	mux := http.NewServeMux()

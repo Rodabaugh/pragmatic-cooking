@@ -46,6 +46,8 @@ func (cfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	cfg.sendMGEmail(user.Name, user.EmailAddr, "New Pragmatic Recepies Account", "An account on Pragmatic.Recepies has been created using this email address")
+
 	if r.Header.Get("Accept") == "application/json" {
 		respondWithJSON(w, http.StatusCreated, response{
 			User: User{
