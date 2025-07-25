@@ -1,0 +1,38 @@
+package main
+
+css base() {
+    background-color: #191724;
+    color: #e0def4;
+    font-family: Monospace;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    font-size: 1.5em;
+}
+
+templ head(){
+    <head>
+        <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+        <title>Pragmatic Cooking</title>
+    </head>
+}
+
+templ header(){
+    <div style="line-height: .2;">
+        <h1 style="color:#f6c177">Pragmatic Cooking</h1>
+        <h4 style="color:#ebbcba">Figure out what to cook.</h4>
+    </div>
+}
+
+templ MainPage(){
+    <!DOCTYPE html>
+    <html>
+        @head()
+        <body class={base()}>
+            <center>@header()</center>
+        </body>
+    </html>
+}

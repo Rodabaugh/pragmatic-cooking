@@ -11,6 +11,10 @@ func main() {
 
 	mux.HandleFunc("GET /admin/healthz", readinessEndpoint)
 
+	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+		MainPage().Render(r.Context(), w)
+	})
+
 	server := &http.Server{
 		Addr:	":8080",
 		Handler: mux,
