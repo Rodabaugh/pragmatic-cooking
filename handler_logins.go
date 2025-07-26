@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -92,4 +93,47 @@ func (apiCfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Login successful")
+}
+
+func (apiCfg *apiConfig) handlerLoginRequest(w http.ResponseWriter, r *http.Request) {
+	type parameters struct {
+		UserEmail string `json:"user_email"`
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	params := parameters{}
+	err := decoder.Decode(&params)
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Was unable to decode parameters", err)
+		return
+	}
+
+	user, err := apiCfg.db.GetUserByEmail(r.Context(), params.UserEmail)
+	if err != nil {
+		respondWithError(w, http.StatusNotFound, "User not found", err)
+		return
+	}
+	
+	token, err := apiCfg.CreateLoginToken(user.ID, r)
+	
+	if err != nil{
+		respondWithError(w, http.StatusInternalServerError, "Unable to create request", err)
+	} else {
+		loginLink := "http://localhost:8080/login/" + token
+		requestMsg := "To login to Pragmatic.Recepies, click the link below.\n\n" + loginLink
+		apiCfg.sendMGEmail(user.Name, user.EmailAddr, "Pragmatic Recepies Login Request", requestMsg)
+	}
+
+
+	if r.Header.Get("Accept") == "application/json" {
+		type responce struct{
+			status	string
+		}
+
+		respondWithJSON(w, http.StatusCreated, responce{
+			status: "OK",
+		})
+	} else {
+		Created().Render(r.Context(), w)
+	}
 }

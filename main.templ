@@ -51,6 +51,24 @@ templ newUserForm(){
     </div>
 }
 
+templ loginForm(){
+    <div class="login-form">
+        <form
+			mx-target="#login-form"
+            hx-post="/api/logins"
+            hx-ext="json-enc"
+        >
+            <input
+                type="email"
+                name="user_email"
+                placeholder="user@example.com"
+                size="50"
+            />
+            <button type="submit">Login!</button>
+        </form>
+    </div>
+}
+
 templ newIngredientForm(){
     <div class="new-ingredient-form">
         <form
@@ -101,6 +119,17 @@ templ NewUserPage(){
         <body class={base()}>
             <center>@header()</center>
 			<center>@newUserForm()</center>
+		</body>
+    </html>
+}
+
+templ LoginPage(){
+	<!DOCTYPE html>
+    <html>
+        @head()
+        <body class={base()}>
+            <center>@header()</center>
+			<center>@loginForm()</center>
 		</body>
     </html>
 }
