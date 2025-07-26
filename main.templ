@@ -82,8 +82,8 @@ templ IngredientsList(ingredients []Ingredient, _ error) {
                 <hr>
                 <h3>{ingredient.Name}</h3>
 				<p>
-					Unit: {ingredient.Unit}<br>
-                	Created: {ingredient.CreatedAt.Local().Format("2006-01-02")}
+					Unit: {ingredient.Unit}
+                	 | Created: {ingredient.CreatedAt.Local().Format("2006-01-02")}
             	</p>
 			</div>
         }

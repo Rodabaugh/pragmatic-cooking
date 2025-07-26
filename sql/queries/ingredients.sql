@@ -1,7 +1,7 @@
 -- name: CreateIngredient :one
-INSERT INTO ingredients (id, created_at, updated_at, name, unit)
+INSERT INTO ingredients (id, created_at, updated_at, name, unit, owner_id)
 VALUES (
-    gen_random_uuid(), NOW(), NOW(), $1, $2
+    gen_random_uuid(), NOW(), NOW(), $1, $2, $3
 )
 RETURNING *;
 

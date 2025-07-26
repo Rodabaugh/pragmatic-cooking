@@ -12,20 +12,21 @@ import (
 )
 
 const createIngredient = `-- name: CreateIngredient :one
-INSERT INTO ingredients (id, created_at, updated_at, name, unit)
+INSERT INTO ingredients (id, created_at, updated_at, name, unit, owner_id)
 VALUES (
-    gen_random_uuid(), NOW(), NOW(), $1, $2
+    gen_random_uuid(), NOW(), NOW(), $1, $2, $3
 )
-RETURNING id, created_at, updated_at, name, unit
+RETURNING id, created_at, updated_at, name, unit, owner_id
 `
 
 type CreateIngredientParams struct {
-	Name string
-	Unit string
+	Name    string
+	Unit    string
+	OwnerID uuid.UUID
 }
 
 func (q *Queries) CreateIngredient(ctx context.Context, arg CreateIngredientParams) (Ingredient, error) {
-	row := q.db.QueryRowContext(ctx, createIngredient, arg.Name, arg.Unit)
+	row := q.db.QueryRowContext(ctx, createIngredient, arg.Name, arg.Unit, arg.OwnerID)
 	var i Ingredient
 	err := row.Scan(
 		&i.ID,
@@ -33,6 +34,7 @@ func (q *Queries) CreateIngredient(ctx context.Context, arg CreateIngredientPara
 		&i.UpdatedAt,
 		&i.Name,
 		&i.Unit,
+		&i.OwnerID,
 	)
 	return i, err
 }
@@ -47,7 +49,7 @@ func (q *Queries) DeleteIngrendientByID(ctx context.Context, id uuid.UUID) error
 }
 
 const getAllIngredients = `-- name: GetAllIngredients :many
-SELECT id, created_at, updated_at, name, unit FROM ingredients
+SELECT id, created_at, updated_at, name, unit, owner_id FROM ingredients
 `
 
 func (q *Queries) GetAllIngredients(ctx context.Context) ([]Ingredient, error) {
@@ -65,6 +67,7 @@ func (q *Queries) GetAllIngredients(ctx context.Context) ([]Ingredient, error) {
 			&i.UpdatedAt,
 			&i.Name,
 			&i.Unit,
+			&i.OwnerID,
 		); err != nil {
 			return nil, err
 		}
@@ -80,7 +83,7 @@ func (q *Queries) GetAllIngredients(ctx context.Context) ([]Ingredient, error) {
 }
 
 const getIngredientByID = `-- name: GetIngredientByID :one
-SELECT id, created_at, updated_at, name, unit FROM ingredients WHERE id = $1
+SELECT id, created_at, updated_at, name, unit, owner_id FROM ingredients WHERE id = $1
 `
 
 func (q *Queries) GetIngredientByID(ctx context.Context, id uuid.UUID) (Ingredient, error) {
@@ -92,12 +95,13 @@ func (q *Queries) GetIngredientByID(ctx context.Context, id uuid.UUID) (Ingredie
 		&i.UpdatedAt,
 		&i.Name,
 		&i.Unit,
+		&i.OwnerID,
 	)
 	return i, err
 }
 
 const getIngredientsByName = `-- name: GetIngredientsByName :many
-SELECT id, created_at, updated_at, name, unit FROM ingredients WHERE name = $1
+SELECT id, created_at, updated_at, name, unit, owner_id FROM ingredients WHERE name = $1
 `
 
 func (q *Queries) GetIngredientsByName(ctx context.Context, name string) ([]Ingredient, error) {
@@ -115,6 +119,7 @@ func (q *Queries) GetIngredientsByName(ctx context.Context, name string) ([]Ingr
 			&i.UpdatedAt,
 			&i.Name,
 			&i.Unit,
+			&i.OwnerID,
 		); err != nil {
 			return nil, err
 		}

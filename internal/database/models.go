@@ -16,6 +16,7 @@ type Ingredient struct {
 	UpdatedAt time.Time
 	Name      string
 	Unit      string
+	OwnerID   uuid.UUID
 }
 
 type LoginToken struct {

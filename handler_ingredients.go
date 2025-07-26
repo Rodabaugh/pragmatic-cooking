@@ -29,6 +29,13 @@ func (cfg *apiConfig) handlerCreateIngredient(w http.ResponseWriter, r *http.Req
 		Ingredient
 	}
 
+	requesterID := cfg.getRequestUserID(r)
+	fmt.Println(requesterID)
+	if requesterID == uuid.Nil {
+		respondWithError(w, http.StatusUnauthorized, "User is not logged in", fmt.Errorf("User is not logged in"))
+		return
+	}
+
 	decoder := json.NewDecoder(r.Body)
 	params := parameters{}
 	err := decoder.Decode(&params)
@@ -40,6 +47,7 @@ func (cfg *apiConfig) handlerCreateIngredient(w http.ResponseWriter, r *http.Req
 	ingredient, err := cfg.db.CreateIngredient(r.Context(), database.CreateIngredientParams{
 		Name: params.IngredientName,
 		Unit: params.IngredientUnit,
+		OwnerID: requesterID,
 	})
 
 	if err != nil {
