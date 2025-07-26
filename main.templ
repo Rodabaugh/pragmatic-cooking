@@ -27,142 +27,6 @@ templ header(){
     </div>
 }
 
-templ newUserForm(){
-    <div class="new-user-form">
-        <form
-			mx-target="#new-user-form"
-            hx-post="/api/users"
-            hx-ext="json-enc"
-        >
-            <input
-                type="text"
-                name="user_name"
-                placeholder="Name"
-                size="50"
-            />
-            <input
-                type="email"
-                name="user_email"
-                placeholder="user@example.com"
-                size="50"
-            />
-            <button type="submit">Create Account!</button>
-        </form>
-    </div>
-}
-
-templ loginForm(){
-    <div class="login-form">
-        <form
-			mx-target="#login-form"
-            hx-post="/api/logins"
-            hx-ext="json-enc"
-        >
-            <input
-                type="email"
-                name="user_email"
-                placeholder="user@example.com"
-                size="50"
-            />
-            <button type="submit">Login!</button>
-        </form>
-    </div>
-}
-
-templ newIngredientForm(){
-    <div class="new-ingredient-form">
-        <form
-			hx-target="#ingredients-list"
-            hx-post="/api/ingredients"
-            hx-ext="json-enc"
-        >
-            <input
-                type="text"
-                name="ingredient_name"
-                placeholder="Name"
-                size="50"
-            />
-            <input
-                type="text"
-                name="ingredient_unit"
-                placeholder="oz/grams"
-                size="20"
-            />
-            <button type="submit">Create Ingredient!</button>
-        </form>
-    </div>
-}
-
-templ IngredientsList(ingredients []Ingredient, _ error) {
-    <div id="ingredients-list" class="ingredients-list">
-        for _, ingredient := range ingredients {
-            <div class="ingredient-item">
-                <hr>
-                <h3>{ingredient.Name}</h3>
-				<p>
-					Unit: {ingredient.Unit}
-                	 | Created: {ingredient.CreatedAt.Local().Format("2006-01-02")}
-					 <br>
-					 <button hx-delete={"/api/ingredients/" + ingredient.ID.String()} hx-target="#ingredients-list">Delete</button>
-            	</p>
-			</div>
-        }
-    </div>
-}
-
-templ newRecipeForm(){
-    <div class="new-recipe-form">
-        <form
-			hx-target="#recipes-list"
-            hx-post="/api/recipes"
-            hx-ext="json-enc"
-        ><br>
-            <input
-                type="text"
-                name="recipe_name"
-                placeholder="Name"
-                size="64"
-            /><br>
-            <textarea
-                type="text"
-                name="recipe_desc"
-                placeholder="Write something about the recipe!"
-                rows="4"
-				cols="70"
-            /><br>
-            <input
-                type="text"
-                name="recipe_link"
-                placeholder="Where can I read the recipe? Ideally on https://pragmatic.recepies/"
-                size="64"
-            /><br>
-            <button type="submit">Create Recipe!</button>
-        </form>
-    </div>
-}
-
-templ RecipesList(recipes []Recipe, _ error) {
-    <div id="recipes-list" class="recipes-list">
-        for _, recipe := range recipes {
-            <div class="recipe-item">
-                <hr>
-                <a href={templ.URL(recipe.Link)} style="color:#31748f"><h3>{recipe.Name}</h3></a>
-				<p>
-					{recipe.Desc}
-                	 <br>
-					 Created: {recipe.CreatedAt.Local().Format("2006-01-02")}
-					 <br>
-					 <button hx-delete={"/api/recipes/" + recipe.ID.String()} hx-target="#recipes-list">Delete</button>
-            	</p>
-			</div>
-        }
-    </div>
-}
-
-templ Created(){
-	<b>Created!</b>
-}
-
 templ NewUserPage(){
 	<!DOCTYPE html>
     <html>
@@ -230,4 +94,8 @@ templ MainPage(cfg *apiConfig){
             <center>@header()</center>
         </body>
     </html>
+}
+
+templ Created(){
+	<b>Created!</b>
 }

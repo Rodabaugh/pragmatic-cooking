@@ -1,0 +1,98 @@
+package main
+
+templ newUserForm(){
+    <div class="new-user-form">
+        <form
+			mx-target="#new-user-form"
+            hx-post="/api/users"
+            hx-ext="json-enc"
+        >
+            <input
+                type="text"
+                name="user_name"
+                placeholder="Name"
+                size="50"
+            />
+            <input
+                type="email"
+                name="user_email"
+                placeholder="user@example.com"
+                size="50"
+            />
+            <button type="submit">Create Account!</button>
+        </form>
+    </div>
+}
+
+templ loginForm(){
+    <div class="login-form">
+        <form
+			mx-target="#login-form"
+            hx-post="/api/logins"
+            hx-ext="json-enc"
+        >
+            <input
+                type="email"
+                name="user_email"
+                placeholder="user@example.com"
+                size="50"
+            />
+            <button type="submit">Login!</button>
+        </form>
+    </div>
+}
+
+templ newIngredientForm(){
+    <div class="new-ingredient-form">
+        <form
+			hx-target="#ingredients-list"
+            hx-post="/api/ingredients"
+            hx-ext="json-enc"
+        >
+            <input
+                type="text"
+                name="ingredient_name"
+                placeholder="Name"
+                size="50"
+            />
+            <input
+                type="text"
+                name="ingredient_unit"
+                placeholder="oz/grams"
+                size="20"
+            />
+            <button type="submit">Create Ingredient!</button>
+        </form>
+    </div>
+}
+
+templ newRecipeForm(){
+    <div class="new-recipe-form">
+        <form
+			hx-target="#recipes-list"
+            hx-post="/api/recipes"
+            hx-ext="json-enc"
+        ><br>
+            <input
+                type="text"
+                name="recipe_name"
+                placeholder="Name"
+                size="64"
+            /><br>
+            <textarea
+                type="text"
+                name="recipe_desc"
+                placeholder="Write something about the recipe!"
+                rows="4"
+				cols="70"
+            /><br>
+            <input
+                type="text"
+                name="recipe_link"
+                placeholder="Where can I read the recipe? Ideally on https://pragmatic.recepies/"
+                size="64"
+            /><br>
+            <button type="submit">Create Recipe!</button>
+        </form>
+    </div>
+}

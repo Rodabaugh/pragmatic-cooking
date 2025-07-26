@@ -1,0 +1,37 @@
+package main
+
+templ IngredientsList(ingredients []Ingredient, _ error) {
+    <div id="ingredients-list" class="ingredients-list">
+        for _, ingredient := range ingredients {
+            <div class="ingredient-item">
+                <hr>
+                <h3>{ingredient.Name}</h3>
+				<p>
+					Unit: {ingredient.Unit}
+                	 | Created: {ingredient.CreatedAt.Local().Format("2006-01-02")}
+					 <br>
+					 <button hx-delete={"/api/ingredients/" + ingredient.ID.String()} hx-target="#ingredients-list">Delete</button>
+            	</p>
+			</div>
+        }
+    </div>
+}
+
+
+templ RecipesList(recipes []Recipe, _ error) {
+    <div id="recipes-list" class="recipes-list">
+        for _, recipe := range recipes {
+            <div class="recipe-item">
+                <hr>
+                <a href={templ.URL(recipe.Link)} style="color:#31748f"><h3>{recipe.Name}</h3></a>
+				<p>
+					{recipe.Desc}
+                	 <br>
+					 Created: {recipe.CreatedAt.Local().Format("2006-01-02")}
+					 <br>
+					 <button hx-delete={"/api/recipes/" + recipe.ID.String()} hx-target="#recipes-list">Delete</button>
+            	</p>
+			</div>
+        }
+    </div>
+}
