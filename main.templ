@@ -102,6 +102,8 @@ templ IngredientsList(ingredients []Ingredient, _ error) {
 				<p>
 					Unit: {ingredient.Unit}
                 	 | Created: {ingredient.CreatedAt.Local().Format("2006-01-02")}
+					 <br>
+					 <button hx-delete={"/api/ingredients/" + ingredient.ID.String()} hx-target="#ingredients-list">Delete</button>
             	</p>
 			</div>
         }

@@ -70,6 +70,51 @@ func (cfg *apiConfig) handlerCreateIngredient(w http.ResponseWriter, r *http.Req
 	}
 }
 
+func (cfg *apiConfig) handlerDeleteIngredient(w http.ResponseWriter, r *http.Request) {
+	ingredientID, err := uuid.Parse(r.PathValue("ingredientID"))
+	if err != nil{
+		respondWithError(w, http.StatusBadRequest, "Invalid ID", err)
+	}
+
+	type response struct {
+		Ingredient
+	}
+
+	requesterID := cfg.getRequestUserID(r)
+	fmt.Println(requesterID)
+	if requesterID == uuid.Nil {
+		respondWithError(w, http.StatusUnauthorized, "User is not logged in", fmt.Errorf("User is not logged in"))
+		return
+	}
+
+	ingredient, err := cfg.db.GetIngredientByID(r.Context(), ingredientID)
+	if err != nil{
+		respondWithError(w, http.StatusNotFound, "Unable to get ingredient with that ID", err)
+		return
+	}
+
+	if requesterID != ingredient.OwnerID{
+		respondWithError(w, http.StatusUnauthorized, "You don't own that ingredient", err)
+		return
+	}
+
+	err = cfg.db.DeleteIngrendientByID(r.Context(), ingredient.ID)
+
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "Unable to delete Ingredient", err)
+		return
+	}
+
+	if r.Header.Get("Accept") == "application/json" {
+		respondWithJSON(w, http.StatusNoContent, response{
+			Ingredient{
+			},
+		})
+	} else {
+		IngredientsList(cfg.Ingredients()).Render(r.Context(), w)
+	}
+}
+
 func (cfg *apiConfig) Ingredients() ([]Ingredient, error) {
 	databaseIngredients, err := cfg.db.GetAllIngredients(context.Background())
 	if err != nil {

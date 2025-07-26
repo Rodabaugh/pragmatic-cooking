@@ -87,7 +87,8 @@ func main() {
 	})
 	
 	mux.HandleFunc("POST /api/ingredients", apiCfg.handlerCreateIngredient)
-	
+	mux.HandleFunc("DELETE /api/ingredients/{ingredientID}", apiCfg.handlerDeleteIngredient)
+
 	mux.HandleFunc("POST /api/logins", apiCfg.handlerLoginRequest)
 	mux.HandleFunc("GET /login/{login_token}", apiCfg.handlerLogin)
 
