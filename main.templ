@@ -51,6 +51,45 @@ templ newUserForm(){
     </div>
 }
 
+templ newIngredientForm(){
+    <div class="new-ingredient-form">
+        <form
+			hx-target="#ingredients-list"
+            hx-post="/api/ingredients"
+            hx-ext="json-enc"
+        >
+            <input
+                type="text"
+                name="ingredient_name"
+                placeholder="Name"
+                size="50"
+            />
+            <input
+                type="text"
+                name="ingredient_unit"
+                placeholder="oz/grams"
+                size="20"
+            />
+            <button type="submit">Create Ingredient!</button>
+        </form>
+    </div>
+}
+
+templ IngredientsList(ingredients []Ingredient, _ error) {
+    <div id="ingredients-list" class="ingredients-list">
+        for _, ingredient := range ingredients {
+            <div class="ingredient-item">
+                <hr>
+                <h3>{ingredient.Name}</h3>
+				<p>
+					Unit: {ingredient.Unit}<br>
+                	Created: {ingredient.CreatedAt.Local().Format("2006-01-02")}
+            	</p>
+			</div>
+        }
+    </div>
+}
+
 templ Created(){
 	<b>Created!</b>
 }
@@ -73,6 +112,19 @@ templ UserPage(){
         <body class={base()}>
             <center>@header()</center>
 			<center>Welcome User!</center>
+		</body>
+    </html>
+}
+
+templ IngredientsPage(cfg *apiConfig){
+<!DOCTYPE html>
+    <html>
+        @head()
+        <body class={base()}>
+            <center>@header()</center>
+			<center>Ingredients</center>
+			<center>@newIngredientForm()</center>
+			<center>@IngredientsList(cfg.Ingredients())</center>
 		</body>
     </html>
 }

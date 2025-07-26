@@ -78,6 +78,12 @@ func main() {
 		NewUserPage().Render(r.Context(), w)
 	})
 
+	mux.HandleFunc("GET /ingredients", func(w http.ResponseWriter, r *http.Request) {
+		IngredientsPage(&apiCfg).Render(r.Context(), w)
+	})
+	
+	mux.HandleFunc("POST /api/ingredients", apiCfg.handlerCreateIngredient)
+
 	mux.HandleFunc("GET /login/{login_token}", apiCfg.handlerLogin)
 
 	mux.HandleFunc("POST /api/users", apiCfg.handlerCreateUser)
