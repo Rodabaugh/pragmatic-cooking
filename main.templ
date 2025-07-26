@@ -110,6 +110,55 @@ templ IngredientsList(ingredients []Ingredient, _ error) {
     </div>
 }
 
+templ newRecipeForm(){
+    <div class="new-recipe-form">
+        <form
+			hx-target="#recipes-list"
+            hx-post="/api/recipes"
+            hx-ext="json-enc"
+        ><br>
+            <input
+                type="text"
+                name="recipe_name"
+                placeholder="Name"
+                size="64"
+            /><br>
+            <textarea
+                type="text"
+                name="recipe_desc"
+                placeholder="Write something about the recipe!"
+                rows="4"
+				cols="70"
+            /><br>
+            <input
+                type="text"
+                name="recipe_link"
+                placeholder="Where can I read the recipe? Ideally on https://pragmatic.recepies/"
+                size="64"
+            /><br>
+            <button type="submit">Create Recipe!</button>
+        </form>
+    </div>
+}
+
+templ RecipesList(recipes []Recipe, _ error) {
+    <div id="recipes-list" class="recipes-list">
+        for _, recipe := range recipes {
+            <div class="recipe-item">
+                <hr>
+                <a href={templ.URL(recipe.Link)} style="color:#31748f"><h3>{recipe.Name}</h3></a>
+				<p>
+					{recipe.Desc}
+                	 <br>
+					 Created: {recipe.CreatedAt.Local().Format("2006-01-02")}
+					 <br>
+					 <button hx-delete={"/api/recipes/" + recipe.ID.String()} hx-target="#recipes-list">Delete</button>
+            	</p>
+			</div>
+        }
+    </div>
+}
+
 templ Created(){
 	<b>Created!</b>
 }
@@ -153,9 +202,22 @@ templ IngredientsPage(cfg *apiConfig){
         @head()
         <body class={base()}>
             <center>@header()</center>
-			<center>Ingredients</center>
+			<center><h2>Ingredients</h2></center>
 			<center>@newIngredientForm()</center>
 			<center>@IngredientsList(cfg.Ingredients())</center>
+		</body>
+    </html>
+}
+
+templ RecipesPage(cfg *apiConfig){
+<!DOCTYPE html>
+    <html>
+        @head()
+        <body class={base()}>
+            <center>@header()</center>
+			<center><h2>Recipes</h2></center>
+			<center>@newRecipeForm()</center>
+			<center>@RecipesList(cfg.Recipes())</center>
 		</body>
     </html>
 }

@@ -57,7 +57,7 @@ func (cfg *apiConfig) handlerCreateIngredient(w http.ResponseWriter, r *http.Req
 
 	if r.Header.Get("Accept") == "application/json" {
 		respondWithJSON(w, http.StatusCreated, response{
-			Ingredient: Ingredient{
+			Ingredient{
 				ID:        ingredient.ID,
 				CreatedAt: ingredient.CreatedAt,
 				UpdatedAt: ingredient.UpdatedAt,

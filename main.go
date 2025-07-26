@@ -89,6 +89,13 @@ func main() {
 	mux.HandleFunc("POST /api/ingredients", apiCfg.handlerCreateIngredient)
 	mux.HandleFunc("DELETE /api/ingredients/{ingredientID}", apiCfg.handlerDeleteIngredient)
 
+	mux.HandleFunc("GET /recipes", func(w http.ResponseWriter, r *http.Request) {
+		RecipesPage(&apiCfg).Render(r.Context(), w)
+	})
+	
+	mux.HandleFunc("POST /api/recipes", apiCfg.handlerCreateRecipe)
+	mux.HandleFunc("DELETE /api/recipes/{recipeID}", apiCfg.handlerDeleteRecipe)
+
 	mux.HandleFunc("POST /api/logins", apiCfg.handlerLoginRequest)
 	mux.HandleFunc("GET /login/{login_token}", apiCfg.handlerLogin)
 

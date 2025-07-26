@@ -26,6 +26,16 @@ type LoginToken struct {
 	ExpireAt  time.Time
 }
 
+type Recipe struct {
+	ID          uuid.UUID
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+	Name        string
+	Description string
+	Link        string
+	OwnerID     uuid.UUID
+}
+
 type User struct {
 	ID            uuid.UUID
 	CreatedAt     time.Time
