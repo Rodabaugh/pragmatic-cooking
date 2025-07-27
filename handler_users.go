@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -61,7 +62,7 @@ func (cfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) 
 
 	if r.Header.Get("Accept") == "application/json" {
 		respondWithJSON(w, http.StatusCreated, response{
-			User: User{
+			User{
 				ID:        user.ID,
 				CreatedAt: user.CreatedAt,
 				UpdatedAt: user.UpdatedAt,
@@ -79,7 +80,39 @@ func (cfg *apiConfig) handlerUserPage(w http.ResponseWriter, r *http.Request) {
 
 	if userID == uuid.Nil{
 		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+		return
 	}
 
-	UserPage().Render(r.Context(), w)
+	dbUser, err := cfg.db.GetUserByID(r.Context(), userID)
+	if err != nil{
+		fmt.Errorf("Was unable to get the user after they logged in: %v", err)
+	}
+
+	user := User{
+			ID:        dbUser.ID,
+			CreatedAt: dbUser.CreatedAt,
+			UpdatedAt: dbUser.UpdatedAt,
+			Name:      dbUser.Name,
+			EmailAddr: dbUser.EmailAddr,
+		}
+
+	dbUserRecipes, err := cfg.db.GetRecipesByOwner(r.Context(), userID)
+	if err != nil{
+		println(err)
+	}
+
+	userRecipes := []Recipe{}
+
+	for _, dbRecipe := range dbUserRecipes {
+		userRecipes = append(userRecipes, Recipe{
+			ID:        dbRecipe.ID,
+			CreatedAt: dbRecipe.CreatedAt,
+			UpdatedAt: dbRecipe.UpdatedAt,
+			Name:      dbRecipe.Name,
+			Desc:      dbRecipe.Description,
+			Link:      dbRecipe.Link,
+		})
+	}
+
+	UserPage(user, userRecipes).Render(r.Context(), w)
 }

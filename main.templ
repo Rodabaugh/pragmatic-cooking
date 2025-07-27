@@ -55,13 +55,14 @@ templ LoginPage(){
     </html>
 }
 
-templ UserPage(){
+templ UserPage(user User, userRecipes []Recipe){
 <!DOCTYPE html>
     <html>
         @head()
         <body class={base()}>
             <center>@header()</center>
-			<center>Welcome!</center>
+			<h2>{"Welcome, " + user.Name + "!"}</h2>
+			@RecipesList(userRecipes, nil)
 		</body>
     </html>
 }

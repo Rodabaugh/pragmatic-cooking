@@ -111,8 +111,6 @@ func (cfg *apiConfig) handlerDeleteRecipeIngredient(w http.ResponseWriter, r *ht
 		IngredientID: ingredientID,
 	})
 
-	fmt.Printf("Deleted Recipe Ingredient: %v", err)
-
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Unable to delete recipe", err)
 		return

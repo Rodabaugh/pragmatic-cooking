@@ -88,7 +88,7 @@ func (apiCfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 		}
 		http.SetCookie(w, &accessTokenCookie)
 		fmt.Printf("Successful login for %s", token.UserID)
-		UserPage().Render(r.Context(), w)
+		http.Redirect(w, r, "/user", http.StatusTemporaryRedirect)
 	}
 }
 
