@@ -85,7 +85,7 @@ templ IngredientPage(cfg *apiConfig, ingredient Ingredient){
         @head()
         <body class={base()}>
             <center>@header()</center>
-			<h2>{ingredient.Name}</h2>
+			<h2>{ingredient.Name + " (" + ingredient.Unit + ")"}</h2>
 			@IngredientRecipesList(cfg.IngredientRecipes(ingredient.ID))
 		</body>
     </html>

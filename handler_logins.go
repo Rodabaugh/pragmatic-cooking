@@ -36,8 +36,6 @@ func (cfg *apiConfig) CreateLoginToken(user uuid.UUID, r *http.Request) (string,
 func (apiCfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 	loginToken := r.PathValue("login_token")
 
-	fmt.Println(loginToken)
-
 	type response struct {
 		User
 		Token        string `json:"token"`

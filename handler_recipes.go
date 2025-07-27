@@ -32,7 +32,6 @@ func (cfg *apiConfig) handlerCreateRecipe(w http.ResponseWriter, r *http.Request
 	}
 
 	requesterID := cfg.getRequestUserID(r)
-	fmt.Println(requesterID)
 	if requesterID == uuid.Nil {
 		respondWithError(w, http.StatusUnauthorized, "User is not logged in", fmt.Errorf("User is not logged in"))
 		return

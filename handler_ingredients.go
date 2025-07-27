@@ -30,7 +30,6 @@ func (cfg *apiConfig) handlerCreateIngredient(w http.ResponseWriter, r *http.Req
 	}
 
 	requesterID := cfg.getRequestUserID(r)
-	fmt.Println(requesterID)
 	if requesterID == uuid.Nil {
 		respondWithError(w, http.StatusUnauthorized, "User is not logged in", fmt.Errorf("User is not logged in"))
 		return
@@ -81,7 +80,6 @@ func (cfg *apiConfig) handlerDeleteIngredient(w http.ResponseWriter, r *http.Req
 	}
 
 	requesterID := cfg.getRequestUserID(r)
-	fmt.Println(requesterID)
 	if requesterID == uuid.Nil {
 		respondWithError(w, http.StatusUnauthorized, "User is not logged in", fmt.Errorf("User is not logged in"))
 		return
