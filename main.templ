@@ -86,6 +86,19 @@ templ RecipesPage(cfg *apiConfig){
     </html>
 }
 
+templ RecipePage(cfg *apiConfig, recipe Recipe){
+<!DOCTYPE html>
+    <html>
+        @head()
+        <body class={base()}>
+            <center>@header()</center>
+			<center><h2>{recipe.Name}</h2></center>
+			<center>@RecipeIngredientsList(cfg.Recipes())</center>
+			<center>@newRecipeIngredientForm()</center>
+		</body>
+    </html>
+}
+
 templ MainPage(cfg *apiConfig){
     <!DOCTYPE html>
     <html>
