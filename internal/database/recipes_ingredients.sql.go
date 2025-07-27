@@ -90,6 +90,8 @@ func (q *Queries) GetAllRecipeIngredients(ctx context.Context) ([]RecipesIngredi
 
 const getIngredientsByRecipe = `-- name: GetIngredientsByRecipe :many
 SELECT
+	ri.recipe_id,
+	ri.ingredient_id,
     i.name AS ingredient_name,
     i.unit,
     ri.quantity
@@ -102,6 +104,8 @@ WHERE
 `
 
 type GetIngredientsByRecipeRow struct {
+	RecipeID       uuid.UUID
+	IngredientID   uuid.UUID
 	IngredientName string
 	Unit           string
 	Quantity       string
@@ -116,7 +120,13 @@ func (q *Queries) GetIngredientsByRecipe(ctx context.Context, recipeID uuid.UUID
 	var items []GetIngredientsByRecipeRow
 	for rows.Next() {
 		var i GetIngredientsByRecipeRow
-		if err := rows.Scan(&i.IngredientName, &i.Unit, &i.Quantity); err != nil {
+		if err := rows.Scan(
+			&i.RecipeID,
+			&i.IngredientID,
+			&i.IngredientName,
+			&i.Unit,
+			&i.Quantity,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)

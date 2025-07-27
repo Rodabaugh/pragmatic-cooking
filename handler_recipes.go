@@ -117,6 +117,31 @@ func (cfg *apiConfig) handlerDeleteRecipe(w http.ResponseWriter, r *http.Request
 	}
 }
 
+func (cfg *apiConfig) handlerRecipePage(w http.ResponseWriter, r *http.Request){
+	recipeID, err := uuid.Parse(r.PathValue("recipeID"))
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid ID", err)
+	}
+
+	dbRecipe, err := cfg.db.GetRecipeByID(r.Context(), recipeID)
+	if err != nil {
+		respondWithError(w, http.StatusNotFound, "Unable to get recipe with that ID", err)
+		return
+	}
+
+	recipe := Recipe{
+		ID:        dbRecipe.ID,
+		CreatedAt: dbRecipe.CreatedAt,
+		UpdatedAt: dbRecipe.UpdatedAt,
+		Name:      dbRecipe.Name,
+		Desc:      dbRecipe.Description,
+		Link:      dbRecipe.Link,
+	}
+
+	fmt.Printf("Surving %s\n", recipe.Name)
+	RecipePage(cfg, recipe).Render(r.Context(), w)
+}
+
 func (cfg *apiConfig) Recipes() ([]Recipe, error) {
 	databaseRecipes, err := cfg.db.GetAllRecipes(context.Background())
 	if err != nil {

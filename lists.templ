@@ -23,13 +23,30 @@ templ RecipesList(recipes []Recipe, _ error) {
         for _, recipe := range recipes {
             <div class="recipe-item">
                 <hr>
-                <a href={templ.URL(recipe.Link)} style="color:#31748f"><h3>{recipe.Name}</h3></a>
+                <a href={"/recipes/" + recipe.ID.String()} style="color:#31748f"><h3>{recipe.Name}</h3></a>
 				<p>
 					{recipe.Desc}
                 	 <br>
+					 <a href={templ.URL(recipe.Link)} style="color:#31748f">{recipe.Name} Recipe</a>
 					 Created: {recipe.CreatedAt.Local().Format("2006-01-02")}
 					 <br>
 					 <button hx-delete={"/api/recipes/" + recipe.ID.String()} hx-target="#recipes-list">Delete</button>
+            	</p>
+			</div>
+        }
+    </div>
+}
+
+templ RecipeIngredientsList(recipeIngredients []RecipeIngredient, _ error) {
+    <div id="recipe-ingredients-list" class="recipes-ingredients-list">
+        for _, recipeIngredient := range recipeIngredients {
+            <div class="recipe-ingredient-item">
+                <hr>
+                <h3>{recipeIngredient.IngredientName}</h3>
+				<p>
+					{recipeIngredient.Quantity} {recipeIngredient.Unit}
+                	 <br>
+					 <button hx-delete={"/api/recipes/" + recipeIngredient.RecipeID.String() + "/" + recipeIngredient.IngredientID.String()} hx-target="#recipe-ingredients-list">Delete</button>
             	</p>
 			</div>
         }

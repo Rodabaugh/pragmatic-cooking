@@ -12,11 +12,13 @@ import (
 )
 
 type RecipeIngredient struct {
-	RecipeID     uuid.UUID
-	IngredientID uuid.UUID
-	Quantity     string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	RecipeID       uuid.UUID
+	IngredientID   uuid.UUID
+	IngredientName string
+	Quantity       string
+	Unit		   string
+	CreatedAt      time.Time
+	UpdatedAt      time.Time
 }
 
 func (cfg *apiConfig) handlerCreateRecipeIngredient(w http.ResponseWriter, r *http.Request) {
@@ -26,8 +28,8 @@ func (cfg *apiConfig) handlerCreateRecipeIngredient(w http.ResponseWriter, r *ht
 	}
 
 	type parameters struct {
-		RecipeIngredientID uuid.UUID `json:"ingredient_id"`
-		RecipeIngredientQuantity string `json:"quantity"`
+		RecipeIngredientID       uuid.UUID `json:"ingredient_id"`
+		RecipeIngredientQuantity string    `json:"quantity"`
 	}
 
 	type response struct {
@@ -50,9 +52,9 @@ func (cfg *apiConfig) handlerCreateRecipeIngredient(w http.ResponseWriter, r *ht
 	}
 
 	recipeIngredient, err := cfg.db.CreateRecipeIngredient(r.Context(), database.CreateRecipeIngredientParams{
-		RecipeID: recipeID,
+		RecipeID:     recipeID,
 		IngredientID: params.RecipeIngredientID,
-		Quantity: params.RecipeIngredientQuantity,
+		Quantity:     params.RecipeIngredientQuantity,
 	})
 
 	if err != nil {
@@ -63,13 +65,13 @@ func (cfg *apiConfig) handlerCreateRecipeIngredient(w http.ResponseWriter, r *ht
 	if r.Header.Get("Accept") == "application/json" {
 		respondWithJSON(w, http.StatusCreated, response{
 			RecipeIngredient{
-				RecipeID:	recipeIngredient.RecipeID,
+				RecipeID:     recipeIngredient.RecipeID,
 				IngredientID: recipeIngredient.IngredientID,
-				Quantity: recipeIngredient.Quantity,
+				Quantity:     recipeIngredient.Quantity,
 			},
 		})
 	} else {
-		RecipeIngredientsList(cfg.RecipeIngredients()).Render(r.Context(), w)
+		RecipeIngredientsList(cfg.RecipeIngredients(recipeID)).Render(r.Context(), w)
 	}
 }
 
@@ -106,7 +108,7 @@ func (cfg *apiConfig) handlerDeleteRecipeIngredient(w http.ResponseWriter, r *ht
 	}
 
 	err = cfg.db.DeleteRecipeIngredient(r.Context(), database.DeleteRecipeIngredientParams{
-		RecipeID: recipeID,
+		RecipeID:     recipeID,
 		IngredientID: ingredientID,
 	})
 
@@ -122,23 +124,25 @@ func (cfg *apiConfig) handlerDeleteRecipeIngredient(w http.ResponseWriter, r *ht
 			RecipeIngredient{},
 		})
 	} else {
-		RecipeIngredientsList(cfg.RecipeIngredients()).Render(r.Context(), w)
+		RecipeIngredientsList(cfg.RecipeIngredients(recipeID)).Render(r.Context(), w)
 	}
 }
 
-func (cfg *apiConfig) RecipeIngredients() ([]RecipeIngredient, error) {
-	databaseRecipeIngredients, err := cfg.db.GetAllRecipeIngredients(context.Background())
+func (cfg *apiConfig) RecipeIngredients(recipeID uuid.UUID) ([]RecipeIngredient, error) {
+	databaseRecipeIngredients, err := cfg.db.GetIngredientsByRecipe(context.Background(), recipeID)
 	if err != nil {
-		return nil, fmt.Errorf("unable to get recipes from database", err)
+		return nil, fmt.Errorf("unable to get recipe ingredients from database", err)
 	}
 
 	recipes := []RecipeIngredient{}
 
 	for _, dbRecipeIngredient := range databaseRecipeIngredients {
 		recipes = append(recipes, RecipeIngredient{
-			RecipeID:	dbRecipeIngredient.RecipeID,
+			RecipeID:     dbRecipeIngredient.RecipeID,
 			IngredientID: dbRecipeIngredient.IngredientID,
-			Quantity: dbRecipeIngredient.Quantity,
+			IngredientName: dbRecipeIngredient.IngredientName,
+			Unit: dbRecipeIngredient.Unit,
+			Quantity:     dbRecipeIngredient.Quantity,
 		})
 	}
 

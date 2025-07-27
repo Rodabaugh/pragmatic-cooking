@@ -93,8 +93,8 @@ templ RecipePage(cfg *apiConfig, recipe Recipe){
         <body class={base()}>
             <center>@header()</center>
 			<center><h2>{recipe.Name}</h2></center>
-			<center>@RecipeIngredientsList(cfg.Recipes())</center>
-			<center>@newRecipeIngredientForm()</center>
+			<center>@RecipeIngredientsList(cfg.RecipeIngredients(recipe.ID))</center>
+			<center>@newRecipeIngredientForm(&recipe)</center>
 		</body>
     </html>
 }

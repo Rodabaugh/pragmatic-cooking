@@ -10,6 +10,8 @@ SELECT * FROM recipes_ingredients;
 
 -- name: GetIngredientsByRecipe :many
 SELECT
+	ri.recipe_id,
+	ri.ingredient_id,
     i.name AS ingredient_name,
     i.unit,
     ri.quantity
