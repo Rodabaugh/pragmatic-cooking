@@ -59,6 +59,7 @@ func (apiCfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 
 	if token.ExpireAt.After(time.Now()) {
 		respondWithError(w, http.StatusForbidden, "Expired token", err)
+		apiCfg.db.DeleteToken(r.Context(), uuidLoginToken)
 		return
 	}
 
@@ -88,11 +89,9 @@ func (apiCfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 			SameSite: http.SameSiteLaxMode,
 		}
 		http.SetCookie(w, &accessTokenCookie)
-
+		fmt.Printf("Successful login for %s", token.UserID)
 		UserPage().Render(r.Context(), w)
 	}
-
-	fmt.Println("Login successful")
 }
 
 func (apiCfg *apiConfig) handlerLoginRequest(w http.ResponseWriter, r *http.Request) {
@@ -120,8 +119,8 @@ func (apiCfg *apiConfig) handlerLoginRequest(w http.ResponseWriter, r *http.Requ
 		respondWithError(w, http.StatusInternalServerError, "Unable to create request", err)
 	} else {
 		loginLink := "http://localhost:8080/login/" + token
-		requestMsg := "To login to Pragmatic.Recepies, click the link below.\n\n" + loginLink
-		apiCfg.sendMGEmail(user.Name, user.EmailAddr, "Pragmatic Recepies Login Request", requestMsg)
+		requestMsg := "To login to Pragmatic.Cooking, click the link below.\n\n" + loginLink
+		apiCfg.sendMGEmail(user.Name, user.EmailAddr, "Pragmatic Cooking Login Request", requestMsg)
 	}
 
 
@@ -134,6 +133,6 @@ func (apiCfg *apiConfig) handlerLoginRequest(w http.ResponseWriter, r *http.Requ
 			status: "OK",
 		})
 	} else {
-		Created().Render(r.Context(), w)
+		LoginLinkSent().Render(r.Context(), w)
 	}
 }

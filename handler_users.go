@@ -70,6 +70,16 @@ func (cfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) 
 			},
 		})
 	} else {
-		Created().Render(r.Context(), w)
+		AccountCreated().Render(r.Context(), w)
 	}
+}
+
+func (cfg *apiConfig) handlerUserPage(w http.ResponseWriter, r *http.Request) {
+	userID := cfg.getRequestUserID(r)
+
+	if userID == uuid.Nil{
+		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
+	}
+
+	UserPage().Render(r.Context(), w)
 }

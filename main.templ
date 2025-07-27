@@ -9,7 +9,7 @@ css base() {
     justify-content: center;
     margin-left: 10%;
     margin-right: 10%;
-    font-size: 1.5em;
+    font-size: 1.2rem;
 }
 
 templ head(){
@@ -27,6 +27,7 @@ templ menu(){
 			<ul>
 				<li><a href="/recipes">Recipies</a></li>
 				<li><a href="/ingredients">Ingredients</a></li>
+				<li><a href="/user">Account</a></li>
 			</ul>
 		</nav>
 	</div>
@@ -40,24 +41,16 @@ templ header(){
 	@menu()
 }
 
-templ NewUserPage(){
-	<!DOCTYPE html>
-    <html>
-        @head()
-        <body class={base()}>
-            <center>@header()</center>
-			<center>@newUserForm()</center>
-		</body>
-    </html>
-}
-
 templ LoginPage(){
 	<!DOCTYPE html>
     <html>
         @head()
         <body class={base()}>
             <center>@header()</center>
-			<center>@loginForm()</center>
+			<h3>Login Here!</h3>
+			@loginForm()
+			<h3>New already a user? Create an account here!</h3>
+			@newUserForm()
 		</body>
     </html>
 }
@@ -68,7 +61,7 @@ templ UserPage(){
         @head()
         <body class={base()}>
             <center>@header()</center>
-			<center>Welcome User!</center>
+			<center>Welcome!</center>
 		</body>
     </html>
 }
@@ -79,9 +72,9 @@ templ IngredientsPage(cfg *apiConfig){
         @head()
         <body class={base()}>
             <center>@header()</center>
-			<center><h2>Ingredients</h2></center>
-			<center>@newIngredientForm()</center>
-			<center>@IngredientsList(cfg.Ingredients())</center>
+			<h2>Ingredients</h2>
+			@newIngredientForm()
+			@IngredientsList(cfg.Ingredients())
 		</body>
     </html>
 }
@@ -92,8 +85,8 @@ templ IngredientPage(cfg *apiConfig, ingredient Ingredient){
         @head()
         <body class={base()}>
             <center>@header()</center>
-			<center><h2>{ingredient.Name}</h2></center>
-			<center>@IngredientRecipesList(cfg.IngredientRecipes(ingredient.ID))</center>
+			<h2>{ingredient.Name}</h2>
+			@IngredientRecipesList(cfg.IngredientRecipes(ingredient.ID))
 		</body>
     </html>
 }
@@ -104,9 +97,9 @@ templ RecipesPage(cfg *apiConfig){
         @head()
         <body class={base()}>
             <center>@header()</center>
-			<center><h2>Recipes</h2></center>
-			<center>@newRecipeForm()</center>
-			<center>@RecipesList(cfg.Recipes())</center>
+			<h2>Recipes</h2>
+			@newRecipeForm()
+			@RecipesList(cfg.Recipes())
 		</body>
     </html>
 }
@@ -116,10 +109,10 @@ templ RecipePage(cfg *apiConfig, recipe Recipe){
     <html>
         @head()
         <body class={base()}>
-            <center>@header()</center>
-			<center><h2>{recipe.Name}</h2></center>
-			<center>@RecipeIngredientsList(cfg.RecipeIngredients(recipe.ID))</center>
-			<center>@newRecipeIngredientForm(&recipe, cfg.Ingredients())</center>
+            @header()
+			<h2>{recipe.Name}</h2>
+			@RecipeIngredientsList(cfg.RecipeIngredients(recipe.ID))
+			@newRecipeIngredientForm(&recipe, cfg.Ingredients())
 		</body>
     </html>
 }
@@ -136,4 +129,12 @@ templ MainPage(cfg *apiConfig){
 
 templ Created(){
 	<b>Created!</b>
+}
+
+templ LoginLinkSent(){
+	<b>A login link has been sent to your email. Please check your email to login.</b>
+}
+
+templ AccountCreated(){
+	<b>Account created! Check your email for your login link.</b>
 }

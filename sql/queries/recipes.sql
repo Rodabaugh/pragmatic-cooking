@@ -11,6 +11,9 @@ SELECT * FROM recipes;
 -- name: GetRecipeByID :one
 SELECT * FROM recipes WHERE id = $1;
 
+-- name: GetRecipesByOwner :many
+SELECT * FROM recipes WHERE owner_id = $1;
+
 -- name: GetRecipesByName :many
 SELECT * FROM recipes WHERE name = $1;
 

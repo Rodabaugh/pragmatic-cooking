@@ -143,3 +143,38 @@ func (q *Queries) GetRecipesByName(ctx context.Context, name string) ([]Recipe, 
 	}
 	return items, nil
 }
+
+const getRecipesByOwner = `-- name: GetRecipesByOwner :many
+SELECT id, created_at, updated_at, name, description, link, owner_id FROM recipes WHERE owner_id = $1
+`
+
+func (q *Queries) GetRecipesByOwner(ctx context.Context, ownerID uuid.UUID) ([]Recipe, error) {
+	rows, err := q.db.QueryContext(ctx, getRecipesByOwner, ownerID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Recipe
+	for rows.Next() {
+		var i Recipe
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Name,
+			&i.Description,
+			&i.Link,
+			&i.OwnerID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
