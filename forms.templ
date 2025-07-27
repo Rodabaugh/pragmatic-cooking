@@ -97,6 +97,26 @@ templ newRecipeForm(){
     </div>
 }
 
-templ newRecipeIngredientForm(recipe *Recipe){
-	<p>Not implemented. - {recipe.Name}</p>	
+templ newRecipeIngredientForm(recipe *Recipe, ingredients []Ingredient) {
+	<div class="new-recipe-ingredient-form">
+        <form
+			hx-target="#recipe-ingredients-list"
+            hx-post={"/api/recipes/" + recipe.ID.String()}
+            hx-ext="json-enc"
+        ><br>
+            <select name="ingredient_id">
+				for _, ingredient := range ingredients {
+					<option value={ingredient.ID.String()}>{ingredient.Name} - {ingredient.Unit}</option>
+				}
+			</select>
+			<br>
+            <input
+                type="text"
+                name="quantity"
+                placeholder="How Much?"
+                size="10"
+            /><br>
+            <button type="submit">Add Ingredient</button>
+        </form>
+    </div>
 }

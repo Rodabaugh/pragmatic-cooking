@@ -115,11 +115,8 @@ func (cfg *apiConfig) handlerDeleteIngredient(w http.ResponseWriter, r *http.Req
 	}
 }
 
-func (cfg *apiConfig) Ingredients() ([]Ingredient, error) {
-	databaseIngredients, err := cfg.db.GetAllIngredients(context.Background())
-	if err != nil {
-		return nil, fmt.Errorf("unable to get ingredients from database", err)
-	}
+func (cfg *apiConfig) Ingredients() ([]Ingredient) {
+	databaseIngredients, _ := cfg.db.GetAllIngredients(context.Background())
 
 	ingredients := []Ingredient{}
 
@@ -133,5 +130,5 @@ func (cfg *apiConfig) Ingredients() ([]Ingredient, error) {
 		})
 	}
 
-	return ingredients, nil
+	return ingredients
 }

@@ -130,14 +130,13 @@ func (cfg *apiConfig) handlerDeleteRecipeIngredient(w http.ResponseWriter, r *ht
 
 func (cfg *apiConfig) RecipeIngredients(recipeID uuid.UUID) ([]RecipeIngredient, error) {
 	databaseRecipeIngredients, err := cfg.db.GetIngredientsByRecipe(context.Background(), recipeID)
-	if err != nil {
-		return nil, fmt.Errorf("unable to get recipe ingredients from database", err)
+	if err != nil{
+		return nil, err
 	}
-
-	recipes := []RecipeIngredient{}
+	recipeIngredients := []RecipeIngredient{}
 
 	for _, dbRecipeIngredient := range databaseRecipeIngredients {
-		recipes = append(recipes, RecipeIngredient{
+		recipeIngredients = append(recipeIngredients, RecipeIngredient{
 			RecipeID:     dbRecipeIngredient.RecipeID,
 			IngredientID: dbRecipeIngredient.IngredientID,
 			IngredientName: dbRecipeIngredient.IngredientName,
@@ -146,5 +145,5 @@ func (cfg *apiConfig) RecipeIngredients(recipeID uuid.UUID) ([]RecipeIngredient,
 		})
 	}
 
-	return recipes, nil
+	return recipeIngredients, nil
 }

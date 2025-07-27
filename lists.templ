@@ -1,6 +1,6 @@
 package main
 
-templ IngredientsList(ingredients []Ingredient, _ error) {
+templ IngredientsList(ingredients []Ingredient) {
     <div id="ingredients-list" class="ingredients-list">
         for _, ingredient := range ingredients {
             <div class="ingredient-item">
