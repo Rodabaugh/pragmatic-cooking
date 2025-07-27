@@ -1,0 +1,21 @@
+.menu ul {
+  list-style-type:none;
+  margin:0;
+  padding:0;
+  overflow:hidden
+}
+.menu li {
+  float:left
+}
+.menu li a {
+  display:block;
+  color:#31748f;
+  text-align:center;
+  padding:.75rem;
+  text-decoration:none;
+  font-family:monospace;
+  font-size:1.2rem;
+}
+.menu li a:hover {
+  background-color:#26233a;
+}

@@ -74,6 +74,9 @@ func main() {
 		MainPage(&apiCfg).Render(r.Context(), w)
 	})
 
+	fs := http.FileServer(http.Dir("./static"))
+	mux.Handle("GET /static/", http.StripPrefix("/static/", fs))
+
 	mux.HandleFunc("GET /user", func(w http.ResponseWriter, r *http.Request) {
 		NewUserPage().Render(r.Context(), w)
 	})

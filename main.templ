@@ -14,10 +14,22 @@ css base() {
 
 templ head(){
     <head>
+		<link rel="stylesheet" href="/static/style.css"/>
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
         <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
         <title>Pragmatic Cooking</title>
     </head>
+}
+
+templ menu(){
+	<div class="menu">
+		<nav>
+			<ul>
+				<li><a href="/recipes">Recipies</a></li>
+				<li><a href="/ingredients">Ingredients</a></li>
+			</ul>
+		</nav>
+	</div>
 }
 
 templ header(){
@@ -25,6 +37,7 @@ templ header(){
         <h1 style="color:#f6c177">Pragmatic Cooking</h1>
         <h4 style="color:#ebbcba">Figure out what to cook.</h4>
     </div>
+	@menu()
 }
 
 templ NewUserPage(){
