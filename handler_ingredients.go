@@ -45,8 +45,8 @@ func (cfg *apiConfig) handlerCreateIngredient(w http.ResponseWriter, r *http.Req
 	}
 
 	ingredient, err := cfg.db.CreateIngredient(r.Context(), database.CreateIngredientParams{
-		Name: params.IngredientName,
-		Unit: params.IngredientUnit,
+		Name:    params.IngredientName,
+		Unit:    params.IngredientUnit,
 		OwnerID: requesterID,
 	})
 
@@ -72,7 +72,7 @@ func (cfg *apiConfig) handlerCreateIngredient(w http.ResponseWriter, r *http.Req
 
 func (cfg *apiConfig) handlerDeleteIngredient(w http.ResponseWriter, r *http.Request) {
 	ingredientID, err := uuid.Parse(r.PathValue("ingredientID"))
-	if err != nil{
+	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid ID", err)
 	}
 
@@ -88,12 +88,12 @@ func (cfg *apiConfig) handlerDeleteIngredient(w http.ResponseWriter, r *http.Req
 	}
 
 	ingredient, err := cfg.db.GetIngredientByID(r.Context(), ingredientID)
-	if err != nil{
+	if err != nil {
 		respondWithError(w, http.StatusNotFound, "Unable to get ingredient with that ID", err)
 		return
 	}
 
-	if requesterID != ingredient.OwnerID{
+	if requesterID != ingredient.OwnerID {
 		respondWithError(w, http.StatusUnauthorized, "You don't own that ingredient", err)
 		return
 	}
@@ -107,15 +107,38 @@ func (cfg *apiConfig) handlerDeleteIngredient(w http.ResponseWriter, r *http.Req
 
 	if r.Header.Get("Accept") == "application/json" {
 		respondWithJSON(w, http.StatusNoContent, response{
-			Ingredient{
-			},
+			Ingredient{},
 		})
 	} else {
 		IngredientsList(cfg.Ingredients()).Render(r.Context(), w)
 	}
 }
 
-func (cfg *apiConfig) Ingredients() ([]Ingredient) {
+func (cfg *apiConfig) handlerIngredientPage(w http.ResponseWriter, r *http.Request) {
+	ingredientID, err := uuid.Parse(r.PathValue("ingredientID"))
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid ID", err)
+	}
+
+	dbIngredient, err := cfg.db.GetIngredientByID(r.Context(), ingredientID)
+	if err != nil {
+		respondWithError(w, http.StatusNotFound, "Unable to get ingredient with that ID", err)
+		return
+	}
+
+	ingredient := Ingredient{
+		ID:        dbIngredient.ID,
+		CreatedAt: dbIngredient.CreatedAt,
+		UpdatedAt: dbIngredient.UpdatedAt,
+		Name:      dbIngredient.Name,
+		Unit:      dbIngredient.Unit,
+	}
+
+	fmt.Printf("Surving recipes using %s\n", ingredient.Name)
+	IngredientPage(cfg, ingredient).Render(r.Context(), w)
+}
+
+func (cfg *apiConfig) Ingredients() []Ingredient {
 	databaseIngredients, _ := cfg.db.GetAllIngredients(context.Background())
 
 	ingredients := []Ingredient{}
@@ -125,8 +148,8 @@ func (cfg *apiConfig) Ingredients() ([]Ingredient) {
 			ID:        dbIngredient.ID,
 			CreatedAt: dbIngredient.CreatedAt,
 			UpdatedAt: dbIngredient.UpdatedAt,
-			Name:  dbIngredient.Name,
-			Unit:   dbIngredient.Unit,
+			Name:      dbIngredient.Name,
+			Unit:      dbIngredient.Unit,
 		})
 	}
 

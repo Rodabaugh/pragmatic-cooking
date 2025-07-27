@@ -24,12 +24,14 @@ WHERE
 
 -- name: GetRecipesByIngredient :many
 SELECT
+	r.id,
     r.name AS recipe_name,
-    r.description
+    r.description,
+	r.link
 FROM
     recipes r
 JOIN
-    recipes_ingredients ri ON r.id = ri.receipe_id
+    recipes_ingredients ri ON r.id = ri.recipe_id
 WHERE
     ri.ingredient_id = $1;
 

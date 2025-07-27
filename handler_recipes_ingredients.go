@@ -16,7 +16,7 @@ type RecipeIngredient struct {
 	IngredientID   uuid.UUID
 	IngredientName string
 	Quantity       string
-	Unit		   string
+	Unit           string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 }
@@ -130,20 +130,41 @@ func (cfg *apiConfig) handlerDeleteRecipeIngredient(w http.ResponseWriter, r *ht
 
 func (cfg *apiConfig) RecipeIngredients(recipeID uuid.UUID) ([]RecipeIngredient, error) {
 	databaseRecipeIngredients, err := cfg.db.GetIngredientsByRecipe(context.Background(), recipeID)
-	if err != nil{
+	if err != nil {
 		return nil, err
 	}
 	recipeIngredients := []RecipeIngredient{}
 
 	for _, dbRecipeIngredient := range databaseRecipeIngredients {
 		recipeIngredients = append(recipeIngredients, RecipeIngredient{
-			RecipeID:     dbRecipeIngredient.RecipeID,
-			IngredientID: dbRecipeIngredient.IngredientID,
+			RecipeID:       dbRecipeIngredient.RecipeID,
+			IngredientID:   dbRecipeIngredient.IngredientID,
 			IngredientName: dbRecipeIngredient.IngredientName,
-			Unit: dbRecipeIngredient.Unit,
-			Quantity:     dbRecipeIngredient.Quantity,
+			Unit:           dbRecipeIngredient.Unit,
+			Quantity:       dbRecipeIngredient.Quantity,
 		})
 	}
 
 	return recipeIngredients, nil
+}
+
+func (cfg *apiConfig) IngredientRecipes(ingredientID uuid.UUID) ([]Recipe, error) {
+	databaseIngredientRecipes, err := cfg.db.GetRecipesByIngredient(context.Background(), ingredientID)
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
+	}
+
+	ingredientRecipes := []Recipe{}
+
+	for _, dbIngredientRecipe := range databaseIngredientRecipes {
+		ingredientRecipes = append(ingredientRecipes, Recipe{
+			ID:   dbIngredientRecipe.ID,
+			Name: dbIngredientRecipe.RecipeName,
+			Desc: dbIngredientRecipe.Description,
+			Link: dbIngredientRecipe.Link,
+		})
+	}
+
+	return ingredientRecipes, nil
 }

@@ -5,7 +5,7 @@ templ IngredientsList(ingredients []Ingredient) {
         for _, ingredient := range ingredients {
             <div class="ingredient-item">
                 <hr>
-                <h3>{ingredient.Name}</h3>
+                <h3><a href={"/ingredients/" + ingredient.ID.String()}>{ingredient.Name}</a></h3>
 				<p>
 					Unit: {ingredient.Unit}
                 	 | Created: {ingredient.CreatedAt.Local().Format("2006-01-02")}
@@ -23,11 +23,11 @@ templ RecipesList(recipes []Recipe, _ error) {
         for _, recipe := range recipes {
             <div class="recipe-item">
                 <hr>
-                <a href={"/recipes/" + recipe.ID.String()} style="color:#31748f"><h3>{recipe.Name}</h3></a>
+                <a href={"/recipes/" + recipe.ID.String()}><h3>{recipe.Name}</h3></a>
 				<p>
 					{recipe.Desc}
                 	 <br>
-					 <a href={templ.URL(recipe.Link)} style="color:#31748f">{recipe.Name} Recipe</a>
+					 <a href={templ.URL(recipe.Link)}>{recipe.Name} Recipe</a>
 					 Created: {recipe.CreatedAt.Local().Format("2006-01-02")}
 					 <br>
 					 <button hx-delete={"/api/recipes/" + recipe.ID.String()} hx-target="#recipes-list">Delete</button>
@@ -39,14 +39,30 @@ templ RecipesList(recipes []Recipe, _ error) {
 
 templ RecipeIngredientsList(recipeIngredients []RecipeIngredient, _ error) {
     <div id="recipe-ingredients-list" class="recipes-ingredients-list">
-        for _, recipeIngredient := range recipeIngredients {
+		for _, recipeIngredient := range recipeIngredients {
             <div class="recipe-ingredient-item">
                 <hr>
-                <h3>{recipeIngredient.IngredientName}</h3>
+                <h3><a href={"/ingredients/" + recipeIngredient.IngredientID.String()}>{recipeIngredient.IngredientName}</a></h3>
 				<p>
 					{recipeIngredient.Quantity} {recipeIngredient.Unit}
                 	 <br>
 					 <button hx-delete={"/api/recipes/" + recipeIngredient.RecipeID.String() + "/" + recipeIngredient.IngredientID.String()} hx-target="#recipe-ingredients-list">Delete</button>
+            	</p>
+			</div>
+        }
+    </div>
+}
+
+templ IngredientRecipesList(recipes []Recipe, _ error) {
+    <div id="recipe-ingredients-list" class="recipes-ingredients-list">
+        for _, recipe := range recipes {
+            <div class="ingredient-recipe-item">
+                <hr>
+                <h3><a href={"/recipes/" + recipe.ID.String()}>{recipe.Name}</a></h3>
+				<p>
+					{recipe.Desc}
+                	<br>
+					<a href={recipe.Link}>Original Recipe</a>
             	</p>
 			</div>
         }

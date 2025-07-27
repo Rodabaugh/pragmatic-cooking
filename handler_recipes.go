@@ -117,7 +117,7 @@ func (cfg *apiConfig) handlerDeleteRecipe(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func (cfg *apiConfig) handlerRecipePage(w http.ResponseWriter, r *http.Request){
+func (cfg *apiConfig) handlerRecipePage(w http.ResponseWriter, r *http.Request) {
 	recipeID, err := uuid.Parse(r.PathValue("recipeID"))
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid ID", err)
@@ -138,7 +138,7 @@ func (cfg *apiConfig) handlerRecipePage(w http.ResponseWriter, r *http.Request){
 		Link:      dbRecipe.Link,
 	}
 
-	fmt.Printf("Surving %s\n", recipe.Name)
+	fmt.Printf("Surving up recipe for %s\n", recipe.Name)
 	RecipePage(cfg, recipe).Render(r.Context(), w)
 }
 
