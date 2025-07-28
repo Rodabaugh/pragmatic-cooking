@@ -54,7 +54,7 @@ func (cfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		welcomeMsg = "An account on Pragmatic.Recepies has been created using this email address."
 	} else {
-		loginLink := "http://localhost:8080/login/" + loginToken
+		loginLink := "https://app.pragmatic.cooking.login/" + loginToken
 		welcomeMsg = "An account on Pragmatic.Recepies has been created using this email address. Login with the link below.\n\n" + loginLink
 	}
 

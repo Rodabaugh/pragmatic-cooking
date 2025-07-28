@@ -14,7 +14,7 @@ import (
 const createLoginToken = `-- name: CreateLoginToken :one
 INSERT INTO login_tokens (token, user_id, created_at, expire_at)
 VALUES (
-    gen_random_uuid(), $1, NOW(), NOW() + interval '1 hour'
+    gen_random_uuid(), $1, NOW(), NOW() + interval '8 hour'
 )
 RETURNING token, user_id, created_at, expire_at
 `

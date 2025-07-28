@@ -54,8 +54,9 @@ func (apiCfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusForbidden, "Invalid login", err)
 		return
 	}
-
-	if token.ExpireAt.After(time.Now()) {
+	
+	if token.ExpireAt.Before(time.Now()) {
+		fmt.Printf("Token expired at %s. It is now %s.",token.ExpireAt.String(), time.Now().String())
 		respondWithError(w, http.StatusForbidden, "Expired token", err)
 		apiCfg.db.DeleteToken(r.Context(), uuidLoginToken)
 		return
@@ -116,7 +117,7 @@ func (apiCfg *apiConfig) handlerLoginRequest(w http.ResponseWriter, r *http.Requ
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Unable to create request", err)
 	} else {
-		loginLink := "http://localhost:8080/login/" + token
+		loginLink := "https://app.pragmatic.cooking/login/" + token
 		requestMsg := "To login to Pragmatic.Cooking, click the link below.\n\n" + loginLink
 		apiCfg.sendMGEmail(user.Name, user.EmailAddr, "Pragmatic Cooking Login Request", requestMsg)
 	}
