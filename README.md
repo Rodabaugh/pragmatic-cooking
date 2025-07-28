@@ -2,6 +2,10 @@
 
 A web app to help you keep track of your favorite recipes.
 
+<img width="1910" height="1033" alt="image" src="https://github.com/user-attachments/assets/f19146f7-c231-4d90-b81d-bde486498999" />
+<img width="1910" height="615" alt="image" src="https://github.com/user-attachments/assets/ca62d9c4-1511-417a-85c1-589660294aec" />
+<img width="1910" height="1327" alt="image" src="https://github.com/user-attachments/assets/82270e12-54fb-4fe5-a40f-7bc3d3085a32" />
+
 ## Why
 
 While I always enjoy cooking, it can be a chore to figure out what to cook.  I created this project for the Boot.Dev 2025 Hackathon, but I am hoping that it will help me keep track of what I enjoy cooking. 
