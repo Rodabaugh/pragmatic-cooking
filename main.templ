@@ -25,7 +25,8 @@ templ menu(){
 	<div class="menu">
 		<nav>
 			<ul>
-				<li><a href="/recipes">Recipies</a></li>
+				<li><a href="/">Home</a></li>
+				<li><a href="/recipes">Recipes</a></li>
 				<li><a href="/ingredients">Ingredients</a></li>
 				<li><a href="/user">Account</a></li>
 			</ul>
@@ -44,7 +45,6 @@ templ header(){
 templ footer(){
 	<center>
 		<div class="footer">
-
 			<a href="https://boot.dev/">Created for the 2025 Boot.Dev Hackathon</a>
 			<br>
 			<a href="https://pragmatic.recipes/">A spinoff of Pragmatic.Recipes</a>
@@ -137,12 +137,52 @@ templ RecipePage(cfg *apiConfig, recipe Recipe){
     </html>
 }
 
+templ mainPageBody(){
+	<p>Welcome to Pragmatic.Cooking! The purpose of this site is to help you keep track of your favorite recipes and what is required to cook them. This is not meant to replace your favorite recipe site, but rather to help you keep track of what you enjoy making. Keeping track of recipes and the ingredients you need enables you to know what you can cook with what you have, or helps you plan your shopping list. Get started by browsing recipes on the Recipes page, or creating an account on the Account page.</p>
+	<br>
+	<b>Key Features:</b>
+	<ul>
+		<li>Knowing what ingredients are needed for a recipe</li>
+    	<li>Knowing what you can make with each ingredient</li>
+    	<li>Links to the original recipe</li>
+	</ul>
+	<br>
+	<b>Technical Features:</b>
+	<ul>
+		<li>User authentication using magic links</li>
+    	<li>Sending magic links to users using the Mailgun API</li>
+    	<li>Storing JWT tokens in cookies for later use</li>
+    	<li>Storing content in a Postgres database</li>
+    	<li>Listing ingredients and recipes from the database using templ</li>
+    	<li>Adding ingredients and recipes to the database and refreshing the list using HTMX</li>
+    	<li>Deleting ingredients and recipes from the database and refreshing the list using HTMX</li>
+    	<li>Preventing users from deleting other users' content</li>
+    	<li>Preventing ingredients in use by a recipe from being deleted</li>
+    	<li>A list of recipes owned by the current user displayed on their account page</li>
+	</ul>
+	<br>
+	<b>Future Features:</b>
+    <ul>
+		<li>Options for each ingredient, including price and retailer</li>
+    	<li>User ingredient option preferences</li>
+    	<li>Using the Kroger API to get current ingredient prices</li>
+    	<li>Cost estimates for each recipe, using user ingredient option preferences</li>
+    	<li>Bookmarked Recipes list on User's Account Page</li>
+    	<li>Shopping list</li>
+    	<li>Weekly meal plan</li>
+	</ul>
+	<p>Several of the recipes on this site are from https://pragmatic.recipes. This is another site that I own, but it is a simple static recipe site, whereas this site is designed to keep track of recipes from any website. The sites are related by name and owner, but have a different technical architecture and purposes.</p>
+
+	<p>This website was created for the 2025 boot.dev Hackathon. While this site is not in what I would consider a finished state right now, I'll be improving it after judging has concluded.</p>
+}
+
 templ MainPage(cfg *apiConfig){
     <!DOCTYPE html>
     <html>
         @head()
         <body class={base()}>
             <center>@header()</center>
+			@mainPageBody()
 			@footer()
         </body>
     </html>
