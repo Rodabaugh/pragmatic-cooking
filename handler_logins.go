@@ -110,10 +110,10 @@ func (apiCfg *apiConfig) handlerLoginRequest(w http.ResponseWriter, r *http.Requ
 		respondWithError(w, http.StatusNotFound, "User not found", err)
 		return
 	}
-	
+
 	token, err := apiCfg.CreateLoginToken(user.ID, r)
-	
-	if err != nil{
+
+	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "Unable to create request", err)
 	} else {
 		loginLink := "http://localhost:8080/login/" + token
@@ -121,10 +121,9 @@ func (apiCfg *apiConfig) handlerLoginRequest(w http.ResponseWriter, r *http.Requ
 		apiCfg.sendMGEmail(user.Name, user.EmailAddr, "Pragmatic Cooking Login Request", requestMsg)
 	}
 
-
 	if r.Header.Get("Accept") == "application/json" {
-		type responce struct{
-			status	string
+		type responce struct {
+			status string
 		}
 
 		respondWithJSON(w, http.StatusCreated, responce{

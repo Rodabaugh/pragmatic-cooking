@@ -50,8 +50,8 @@ func (cfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) 
 	loginToken, err := cfg.CreateLoginToken(user.ID, r)
 
 	var welcomeMsg string
-	
-	if err != nil{
+
+	if err != nil {
 		welcomeMsg = "An account on Pragmatic.Recepies has been created using this email address."
 	} else {
 		loginLink := "http://localhost:8080/login/" + loginToken
@@ -78,26 +78,26 @@ func (cfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Request) 
 func (cfg *apiConfig) handlerUserPage(w http.ResponseWriter, r *http.Request) {
 	userID := cfg.getRequestUserID(r)
 
-	if userID == uuid.Nil{
+	if userID == uuid.Nil {
 		http.Redirect(w, r, "/login", http.StatusTemporaryRedirect)
 		return
 	}
 
 	dbUser, err := cfg.db.GetUserByID(r.Context(), userID)
-	if err != nil{
+	if err != nil {
 		fmt.Errorf("Was unable to get the user after they logged in: %v", err)
 	}
 
 	user := User{
-			ID:        dbUser.ID,
-			CreatedAt: dbUser.CreatedAt,
-			UpdatedAt: dbUser.UpdatedAt,
-			Name:      dbUser.Name,
-			EmailAddr: dbUser.EmailAddr,
-		}
+		ID:        dbUser.ID,
+		CreatedAt: dbUser.CreatedAt,
+		UpdatedAt: dbUser.UpdatedAt,
+		Name:      dbUser.Name,
+		EmailAddr: dbUser.EmailAddr,
+	}
 
 	dbUserRecipes, err := cfg.db.GetRecipesByOwner(r.Context(), userID)
-	if err != nil{
+	if err != nil {
 		println(err)
 	}
 

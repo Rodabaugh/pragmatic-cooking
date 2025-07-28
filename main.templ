@@ -34,11 +34,24 @@ templ menu(){
 }
 
 templ header(){
-    <div style="line-height: .2;">
+    <div class="header" style="line-height: .3;">
         <h1 style="color:#f6c177">Pragmatic Cooking</h1>
         <h4 style="color:#ebbcba">Figure out what to cook.</h4>
     </div>
 	@menu()
+}
+
+templ footer(){
+	<center>
+		<div class="footer">
+
+			<a href="https://boot.dev/">Created for the 2025 Boot.Dev Hackathon</a>
+			<br>
+			<a href="https://pragmatic.recipes/">A spinoff of Pragmatic.Recipes</a>
+			<b> | </b>
+			<a href="https://github.com/rodabaugh/pragmatic-cooking">View this project on GitHub</a>
+		</div>
+	</center>
 }
 
 templ LoginPage(){
@@ -51,6 +64,7 @@ templ LoginPage(){
 			@loginForm()
 			<h3>New already a user? Create an account here!</h3>
 			@newUserForm()
+			@footer()
 		</body>
     </html>
 }
@@ -63,6 +77,7 @@ templ UserPage(user User, userRecipes []Recipe){
             <center>@header()</center>
 			<h2>{"Welcome, " + user.Name + "!"}</h2>
 			@RecipesList(userRecipes, nil)
+			@footer()
 		</body>
     </html>
 }
@@ -76,6 +91,7 @@ templ IngredientsPage(cfg *apiConfig){
 			<h2>Ingredients</h2>
 			@newIngredientForm()
 			@IngredientsList(cfg.Ingredients())
+			@footer()
 		</body>
     </html>
 }
@@ -88,6 +104,7 @@ templ IngredientPage(cfg *apiConfig, ingredient Ingredient){
             <center>@header()</center>
 			<h2>{ingredient.Name + " (" + ingredient.Unit + ")"}</h2>
 			@IngredientRecipesList(cfg.IngredientRecipes(ingredient.ID))
+			@footer()
 		</body>
     </html>
 }
@@ -101,6 +118,7 @@ templ RecipesPage(cfg *apiConfig){
 			<h2>Recipes</h2>
 			@newRecipeForm()
 			@RecipesList(cfg.Recipes())
+			@footer()
 		</body>
     </html>
 }
@@ -114,6 +132,7 @@ templ RecipePage(cfg *apiConfig, recipe Recipe){
 			<h2>{recipe.Name}</h2>
 			@RecipeIngredientsList(cfg.RecipeIngredients(recipe.ID))
 			@newRecipeIngredientForm(&recipe, cfg.Ingredients())
+			@footer()
 		</body>
     </html>
 }
@@ -124,6 +143,7 @@ templ MainPage(cfg *apiConfig){
         @head()
         <body class={base()}>
             <center>@header()</center>
+			@footer()
         </body>
     </html>
 }
