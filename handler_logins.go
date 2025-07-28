@@ -87,7 +87,7 @@ func (apiCfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 			SameSite: http.SameSiteLaxMode,
 		}
 		http.SetCookie(w, &accessTokenCookie)
-		fmt.Printf("Successful login for %s", token.UserID)
+		fmt.Printf("Successful login for %s\n", token.UserID)
 		http.Redirect(w, r, "/user", http.StatusTemporaryRedirect)
 	}
 }

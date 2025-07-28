@@ -96,6 +96,17 @@ func (cfg *apiConfig) handlerDeleteIngredient(w http.ResponseWriter, r *http.Req
 		return
 	}
 
+	ingredientDependantCount, err := cfg.db.GetIngredientDependantCount(r.Context(), ingredientID)
+	if err != nil{
+		respondWithError(w, http.StatusInternalServerError, "Unable to get dependant count", err)
+		return
+	}
+
+	if ingredientDependantCount > 0 {
+		respondWithError(w, http.StatusBadRequest, "That ingredient is in use", err)
+		return
+	}
+
 	err = cfg.db.DeleteIngrendientByID(r.Context(), ingredient.ID)
 
 	if err != nil {

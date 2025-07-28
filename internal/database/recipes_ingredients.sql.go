@@ -88,6 +88,17 @@ func (q *Queries) GetAllRecipeIngredients(ctx context.Context) ([]RecipesIngredi
 	return items, nil
 }
 
+const getIngredientDependantCount = `-- name: GetIngredientDependantCount :one
+SELECT COUNT(*) FROM recipes_ingredients WHERE ingredient_id = $1
+`
+
+func (q *Queries) GetIngredientDependantCount(ctx context.Context, ingredientID uuid.UUID) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getIngredientDependantCount, ingredientID)
+	var count int64
+	err := row.Scan(&count)
+	return count, err
+}
+
 const getIngredientsByRecipe = `-- name: GetIngredientsByRecipe :many
 SELECT
 	ri.recipe_id,

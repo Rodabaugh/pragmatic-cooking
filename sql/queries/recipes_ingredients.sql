@@ -35,6 +35,9 @@ JOIN
 WHERE
     ri.ingredient_id = $1;
 
+-- name: GetIngredientDependantCount :one
+SELECT COUNT(*) FROM recipes_ingredients WHERE ingredient_id = $1;
+
 -- name: DeleteRecipeIngredient :exec
 DELETE FROM
     recipes_ingredients
